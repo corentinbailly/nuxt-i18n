@@ -3,7 +3,7 @@ import { detectBrowserLanguage, rootRedirect } from './options'
 import { getLocaleFromRoute } from './utils'
 
 middleware.nuxti18n = async (context) => {
-  const { app, route, redirect, isHMR } = context
+  const { app, route, redirect, isHMR, error } = context
 
   if (isHMR) {
     return
@@ -21,6 +21,10 @@ middleware.nuxti18n = async (context) => {
 
   const locale = app.i18n.locale || app.i18n.defaultLocale || null
   const routeLocale = getLocaleFromRoute(route)
+
+  if (routeLocale !== null && locale !== routeLocale) {
+    error({ statusCode: 404, message: 'Not found' })
+  }
 
   await app.i18n.setLocale(routeLocale || locale)
 }
