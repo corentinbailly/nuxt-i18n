@@ -2,7 +2,7 @@ import middleware from '../middleware'
 
 /** @type {import('@nuxt/types').Middleware} */
 middleware.nuxti18n = async (context) => {
-  const { app, isHMR } = context
+  const { app, isHMR, error } = context
 
   if (isHMR) {
     return
@@ -13,4 +13,13 @@ middleware.nuxti18n = async (context) => {
     const query = preserveQuery ? context.route.query : undefined
     context.redirect(status, redirectPath, query)
   }
+
+  const locale = app.i18n.locale || app.i18n.defaultLocale || null
+  const routeLocale = getLocaleFromRoute(route)
+
+  if (routeLocale !== null && locale !== routeLocale) {
+    error({ statusCode: 404, message: 'Not found' })
+  }
+
+  await app.i18n.setLocale(routeLocale || locale)
 }
