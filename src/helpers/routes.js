@@ -15,6 +15,7 @@ exports.makeRoutes = (baseRoutes, {
   strategy,
   trailingSlash
 }) => {
+  const configLocales = locales
   locales = getLocaleCodes(locales)
   let localizedRoutes = []
 
@@ -112,7 +113,7 @@ exports.makeRoutes = (baseRoutes, {
       // Add route prefix if needed
       const shouldAddPrefix = (
         // No prefix if app uses different locale domains
-        !differentDomains &&
+        typeof configLocales[i].domain === 'undefined' &&
         // No need to add prefix if child's path is relative
         !isChildWithRelativePath &&
         // Skip default locale if strategy is PREFIX_EXCEPT_DEFAULT
