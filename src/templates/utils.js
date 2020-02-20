@@ -160,6 +160,7 @@ export const getLocaleFromRoute = (route = {}) => {
   if (route.name) {
     const regexp = new RegExp(`${routesNameSeparator}${localesPattern}${defaultSuffixPattern}$`, 'i')
     const matches = route.name.match(regexp)
+    console.log(matches);
     if (matches && matches.length > 1) {
       return matches[1]
     }
