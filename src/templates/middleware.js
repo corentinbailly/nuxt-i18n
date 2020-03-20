@@ -15,9 +15,9 @@ middleware.nuxti18n = async (context) => {
   }
 
   const locale = app.i18n.locale || app.i18n.defaultLocale || null
-  const routeLocale = getLocaleFromRoute(route)
+  const routeLocale = getLocaleFromRoute(route, locale)
 
-  if (routeLocale !== null && locale !== routeLocale) {
+  if (routeLocale === null) {
     error({ statusCode: 404, message: 'Not found' })
   }
 

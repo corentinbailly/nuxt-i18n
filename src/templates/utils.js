@@ -155,7 +155,7 @@ export const getLocaleDomain = (nuxtI18n, req) => {
  * @param  {Object} route               Route
  * @return {String}                     Locale code found if any
  */
-export const getLocaleFromRoute = (route = {}) => {
+export const getLocaleFromRoute = (route = {}, locale = null) => {
   const localesPattern = `(${localeCodes.join('|')})`
   const defaultSuffixPattern = `(?:${routesNameSeparator}${defaultLocaleRouteNameSuffix})?`
   // Extract from route name
@@ -163,18 +163,27 @@ export const getLocaleFromRoute = (route = {}) => {
     const regexp = new RegExp(`${routesNameSeparator}${localesPattern}${defaultSuffixPattern}$`, 'i')
     const matches = route.name.match(regexp)
     if (matches && matches.length > 1) {
-      return matches[1]
+      if (locale === null) {
+        return matches[1]
+      }
+      const match = matches.find(match => match === locale)
+      return typeof match === 'undefined' ? null : match
     }
   } else if (route.path) {
     // Extract from path
     const regexp = new RegExp(`^/${localesPattern}/`, 'i')
     const matches = route.path.match(regexp)
     if (matches && matches.length > 1) {
-      return matches[1]
+      if (locale === null) {
+        return matches[1]
+      }
+      const match = matches.find(match => match === locale)
+      return typeof match === 'undefined' ? null : match
     }
   }
   return null
 }
+
 
 /**
  * Dispatch store module actions to keep it in sync with app's locale data
