@@ -18,7 +18,14 @@ middleware.nuxti18n = async (context) => {
   const routeLocale = getLocaleFromRoute(route, locale)
 
   if (routeLocale === null) {
-    error({ statusCode: 404, message: 'Not found' })
+    const localePath = app.switchLocalePath(locale)
+    if (typeof localePath === 'undefined') {
+      error({ statusCode: 404, message: 'Not found' })
+    } else {
+      if (route.path !== new URL(localePath).pathname) {
+        redirect(localePath)
+      }
+    }
   }
 
   await app.i18n.setLocale(routeLocale || locale)
