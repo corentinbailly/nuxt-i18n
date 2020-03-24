@@ -132,15 +132,15 @@ export function isSameRoute (a, b) {
 }
 
 /**
- * Get locale code that corresponds to current hostname
+ * Get locale code that corresponds to current host
  * @param  {VueI18n} nuxtI18n Instance of VueI18n
  * @param  {object} req Request object
  * @return {String} Locade code found if any
  */
 export const getLocaleDomain = (nuxtI18n, req) => {
-  const hostname = process.client ? window.location.hostname : (req.headers['x-forwarded-host'] || req.headers.host)
-  if (hostname) {
-    const localeDomain = nuxtI18n.locales.find(l => l[LOCALE_DOMAIN_KEY] === hostname)
+  const host = process.client ? window.location.host : (req.headers['x-forwarded-host'] || req.headers.host)
+  if (host) {
+    const localeDomain = nuxtI18n.locales.find(l => l[LOCALE_DOMAIN_KEY] === host)
     if (localeDomain) {
       return localeDomain[LOCALE_CODE_KEY]
     }
